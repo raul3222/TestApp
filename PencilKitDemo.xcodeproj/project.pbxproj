@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		AD2B39C52C95BF97006CAA73 /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2B39C42C95BF97006CAA73 /* CameraButton.swift */; };
 		AD2B39C92C961DDF006CAA73 /* ControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2B39C82C961DDF006CAA73 /* ControllerPresenter.swift */; };
+		AD2B39CC2C9627CF006CAA73 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = AD2B39CB2C9627CF006CAA73 /* GoogleSignIn */; };
+		AD2B39CE2C9627CF006CAA73 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AD2B39CD2C9627CF006CAA73 /* GoogleSignInSwift */; };
 		AD5CB27D2C9464FB0059F769 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AD5CB27C2C9464FB0059F769 /* FirebaseAuth */; };
 		AD5CB27F2C9464FB0059F769 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AD5CB27E2C9464FB0059F769 /* FirebaseFirestore */; };
 		AD5CB2812C9464FB0059F769 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = AD5CB2802C9464FB0059F769 /* FirebaseFirestoreCombine-Community */; };
@@ -67,11 +69,13 @@
 				AD5CB28D2C9464FB0059F769 /* FirebaseMessaging in Frameworks */,
 				AD5CB2812C9464FB0059F769 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				AD5CB28F2C9464FB0059F769 /* FirebaseStorageCombine-Community in Frameworks */,
+				AD2B39CC2C9627CF006CAA73 /* GoogleSignIn in Frameworks */,
 				AD5CB2892C9464FB0059F769 /* FirebaseInstallations in Frameworks */,
 				AD5CB27D2C9464FB0059F769 /* FirebaseAuth in Frameworks */,
 				AD5CB28B2C9464FB0059F769 /* FirebaseMLModelDownloader in Frameworks */,
 				AD5CB27F2C9464FB0059F769 /* FirebaseFirestore in Frameworks */,
 				AD5CB2852C9464FB0059F769 /* FirebaseFunctionsCombine-Community in Frameworks */,
+				AD2B39CE2C9627CF006CAA73 /* GoogleSignInSwift in Frameworks */,
 				AD5CB2832C9464FB0059F769 /* FirebaseFunctions in Frameworks */,
 				AD5CB2912C9464FB0059F769 /* FirebaseVertexAI-Preview in Frameworks */,
 				AD5CB2872C9464FB0059F769 /* FirebaseInAppMessaging-Beta in Frameworks */,
@@ -210,6 +214,8 @@
 				AD5CB28C2C9464FB0059F769 /* FirebaseMessaging */,
 				AD5CB28E2C9464FB0059F769 /* FirebaseStorageCombine-Community */,
 				AD5CB2902C9464FB0059F769 /* FirebaseVertexAI-Preview */,
+				AD2B39CB2C9627CF006CAA73 /* GoogleSignIn */,
+				AD2B39CD2C9627CF006CAA73 /* GoogleSignInSwift */,
 			);
 			productName = PencilKitDemo;
 			productReference = AD7837162C92ECCD00638CB3 /* PencilKitDemo.app */;
@@ -241,6 +247,7 @@
 			mainGroup = AD78370D2C92ECCD00638CB3;
 			packageReferences = (
 				AD5CB27B2C9464FB0059F769 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AD2B39CA2C9627CF006CAA73 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = AD7837172C92ECCD00638CB3 /* Products */;
 			projectDirPath = "";
@@ -551,6 +558,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AD2B39CA2C9627CF006CAA73 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		AD5CB27B2C9464FB0059F769 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -562,6 +577,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AD2B39CB2C9627CF006CAA73 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD2B39CA2C9627CF006CAA73 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		AD2B39CD2C9627CF006CAA73 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD2B39CA2C9627CF006CAA73 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		AD5CB27C2C9464FB0059F769 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AD5CB27B2C9464FB0059F769 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

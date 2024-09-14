@@ -10,6 +10,7 @@ import CoreImage
 import AVFoundation
 import Photos
 import PencilKit
+import FirebaseAuth
 
 enum Filters: String {
     case defaults
@@ -110,6 +111,15 @@ class MainVC: UIViewController, PKCanvasViewDelegate {
           flashMode = .auto
         }
     }
+    @IBAction func signoutBtnPressed(_ sender: Any) {
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+            ControllerManager.presentController(id: "LoginVC")
+        } catch let signOutError as NSError {
+          print("Error signing out: %@", signOutError)
+        }
+    }
     @IBAction func shareBtnTapped(_ sender: Any) {
       
         guard let img = self.previewImage else { return }
@@ -169,7 +179,7 @@ class MainVC: UIViewController, PKCanvasViewDelegate {
     }
     
     @IBAction func takePhotoBtnPRessed(_ sender: Any) {
-        handleTakePhoto()
+       handleTakePhoto()
     }
 }
 

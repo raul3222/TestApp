@@ -11,7 +11,6 @@ import FirebaseAuth
 protocol RegistrationViewModelProtocol {
     var successRegistration: Box<Bool?> { get }
     var error: String? { get }
-    var readyToSignUp: Bool { get set }
     func isValidEmail(_ email: String) -> Bool
     func checkPassword(_ password: String) -> Bool
     func createAccount(with email: String, and password: String)
@@ -39,7 +38,6 @@ class RegistrationViewModel: RegistrationViewModelProtocol {
    }
     
     func createAccount(with email: String, and password: String) {
-//        if !readyToSignUp { return }
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if error == nil {
                 Auth.auth().currentUser?.sendEmailVerification()

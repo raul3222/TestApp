@@ -7,8 +7,11 @@
 
 import UIKit
 import FirebaseAuth
+import GoogleSignIn
+import FirebaseCore
 
 class LoginVC: UIViewController {
+    @IBOutlet weak var googleBtn: GIDSignInButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
@@ -26,6 +29,8 @@ class LoginVC: UIViewController {
         addGestures()
         activityIndicator.isHidden = true
         activityIndicator.hidesWhenStopped = true
+        
+        googleBtn.style = .wide
     }
     
     private func addGestures() {
@@ -82,6 +87,34 @@ class LoginVC: UIViewController {
     @IBAction func createAccPressed(_ sender: Any) {
         
     }
+    
+    @IBAction func googleSignInPressed(_ sender: Any) {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+
+        // Create Google Sign In configuration object.
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
+          guard error == nil else {
+            // ...
+          return }
+
+          guard let user = result?.user,
+            let idToken = user.idToken?.tokenString
+          else {
+            // ...
+          return }
+
+          let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                         accessToken: user.accessToken.tokenString)
+            ControllerManager.presentController(id: "MainVC")
+
+          // ...
+        }
+    }
+    
     
     @IBAction func signInPressed(_ sender: Any) {
         guard let email = emailTF.text,
