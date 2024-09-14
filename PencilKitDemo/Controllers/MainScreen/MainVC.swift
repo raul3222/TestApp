@@ -9,6 +9,7 @@ import UIKit
 import CoreImage
 import AVFoundation
 import Photos
+import PencilKit
 
 enum Filters: String {
     case defaults
@@ -16,7 +17,10 @@ enum Filters: String {
     case sepia = "CISepiaTone"
 }
 
-class MainVC: UIViewController {
+class MainVC: UIViewController, PKCanvasViewDelegate {
+    @IBOutlet weak var flashBtn: UIButton!
+    @IBOutlet weak var shareBtn: UIButton!
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var takePhotoBtn: CameraButton!
     @IBOutlet weak var cameraView: UIView!
@@ -24,20 +28,24 @@ class MainVC: UIViewController {
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var previewImgView: UIImageView!
     @IBOutlet weak var pickerContainer: UIView!
+    
+    let photoOutput = AVCapturePhotoOutput()
+    let canvas = PKCanvasView()
+    let captureModesList = ["Default", "Sepia", "Gray"]
+    
     var previewImage: UIImage?
     var selectedFilter: Filters = .grayscale
-    let photoOutput = AVCapturePhotoOutput()
+   
     var cameraLayer: AVCaptureVideoPreviewLayer!
     var flashMode: AVCaptureDevice.FlashMode = .auto
     var captureDevice: AVCaptureDevice!
-    
     var cameraModePicker: UIPickerView!
-    
-    let captureModesList = ["Default", "Sepia", "Gray"]
     var rotationAngle: CGFloat! = -90  * (.pi/180)
      
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 3.0
         cameraModePicker = UIPickerView()
         cameraModePicker.dataSource = self
         cameraModePicker.delegate = self
@@ -52,9 +60,21 @@ class MainVC: UIViewController {
             cameraModePicker.bottomAnchor.constraint(equalTo: pickerContainer.bottomAnchor),
             
         ])
+        canvas.delegate = self
+        canvas.drawingPolicy = .anyInput
+        previewImgView.addSubview(canvas)
+        canvas.backgroundColor = .clear
         openCamera()
         saveBtn.isHidden = true
+        shareBtn.isHidden = true
     }
+    
+    override func viewDidLayoutSubviews() {
+           super.viewDidLayoutSubviews()
+           canvas.frame = previewImgView.bounds
+       }
+    
+    
     @IBAction func galleryBtn(_ sender: Any) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -62,10 +82,6 @@ class MainVC: UIViewController {
     }
     
     @IBAction func closeImageTapped(_ sender: Any) {
-//        previewImgView.isHidden = true
-//        cameraView.isHidden = false
-//        takePhotoBtn.isHidden = false
-//        pickerContainer.isHidden = true
         hidePreview()
     }
     
@@ -73,12 +89,52 @@ class MainVC: UIViewController {
         UIImageWriteToSavedPhotosAlbum(previewImage!, nil, nil, nil)
         hidePreview()
     }
+    @IBAction func flashBtnPressed(_ sender: Any) {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
+        switch flashMode {
+        case .auto:
+          flashMode = .off
+            flashBtn.setImage(UIImage(systemName: "bolt"), for: .normal)
+            flashBtn.tintColor = .lightGray
+        case .off:
+          flashMode = .on
+            flashBtn.setImage(UIImage(systemName: "bolt.fill"), for: .normal)
+            flashBtn.tintColor = .yellow
+        case .on:
+          flashMode = .auto
+            flashBtn.tintColor = .lightGray
+            flashBtn.setImage(UIImage(systemName: "bolt.badge.automatic.fill"), for: .normal)
+        default:
+          flashMode = .auto
+        }
+    }
+    @IBAction func shareBtnTapped(_ sender: Any) {
+      
+        guard let img = self.previewImage else { return }
+        let myQueue = DispatchQueue(__label: "my.queue", attr: nil)
+        myQueue.async(execute: { [self] () -> Void in
+            var photoToShare: [URL] = []
+            guard let previewImage = previewImage else { return }
+                let urlShare = createImageToShare(image: previewImage)
+                photoToShare.append(urlShare)
+            
+            DispatchQueue.main.async {
+                let ac = UIActivityViewController(activityItems: photoToShare, applicationActivities: nil)
+                ac.overrideUserInterfaceStyle = .dark
+                self.present(ac, animated: true) {
+                }
+            }
+        })
+    }
     
     private func hidePreview() {
         previewImgView.isHidden = true
         cameraView.isHidden = false
         takePhotoBtn.isHidden = false
         saveBtn.isHidden = true
+        shareBtn.isHidden = true
         pickerContainer.isHidden = true
     }
     
@@ -88,6 +144,7 @@ class MainVC: UIViewController {
         takePhotoBtn.isHidden = true
         saveBtn.isHidden = false
         pickerContainer.isHidden = false
+        shareBtn.isHidden = false
     }
     
     func applySepiaFilter(intensity: Float, image: UIImage) {
@@ -110,25 +167,11 @@ class MainVC: UIViewController {
       let newImage = UIImage(ciImage: outputImage)
       previewImgView.image = newImage
     }
-//    
-//    @IBAction func sliderValueChanged(_ sender: Any) {
-//        guard let image = previewImage else { return }
-//        switch selectedFilter {
-//        case .defaults:
-//            break
-//        case .grayscale:
-//            applyGrayScaleFilter(intensity: 0.7, image: image)
-//        case .sepia:
-//            applySepiaFilter(intensity: 0.7, image: image)
-//        }
-//    }
     
     @IBAction func takePhotoBtnPRessed(_ sender: Any) {
         handleTakePhoto()
     }
-    
 }
-
 
 extension MainVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   func imagePickerController(
@@ -137,10 +180,6 @@ extension MainVC: UIImagePickerControllerDelegate, UINavigationControllerDelegat
         guard let selectedImage = info[.originalImage] as? UIImage else { return }
         previewImgView.image = selectedImage
         self.previewImage = selectedImage
-//        cameraView.isHidden = true
-//        takePhotoBtn.isHidden = true
-//        previewImgView.isHidden = false
-//        pickerContainer.isHidden = false
         showPreview()
         dismiss(animated: true)
   }
@@ -244,9 +283,6 @@ extension MainVC {
            
             DispatchQueue.global().async {
                 captureSession.startRunning()
-                DispatchQueue.main.async {
-//                    self.bottomView.isHidden = false
-                }
             }
         }
     }
@@ -269,6 +305,22 @@ extension MainVC {
             photoOutput.capturePhoto(with: photoSettings, delegate: self)
         }
     }
+    
+    private func createImageToShare(image: UIImage) -> URL {
+        let url = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+            .appendingPathComponent("MyPhoto", isDirectory: false)
+            .appendingPathExtension("jpg")
+        
+        if let data = image.jpegData(compressionQuality: 0.7) {
+            do {
+                try data.write(to: url)
+                
+            } catch {
+                print("Handle the error")
+            }
+        }
+        return url
+    }
 }
 
 
@@ -278,10 +330,6 @@ extension MainVC: AVCapturePhotoCaptureDelegate {
         let previewImage = UIImage(data: imageData)
         self.previewImage = previewImage
         previewImgView.image = previewImage
-//        cameraView.isHidden = true
-//        takePhotoBtn.isHidden = true
-//        pickerContainer.isHidden = false
-//        previewImgView.isHidden = false
         showPreview()
     }
 }

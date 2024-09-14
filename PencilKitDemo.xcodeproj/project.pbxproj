@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AD2B39C52C95BF97006CAA73 /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2B39C42C95BF97006CAA73 /* CameraButton.swift */; };
+		AD2B39C92C961DDF006CAA73 /* ControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2B39C82C961DDF006CAA73 /* ControllerPresenter.swift */; };
 		AD5CB27D2C9464FB0059F769 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AD5CB27C2C9464FB0059F769 /* FirebaseAuth */; };
 		AD5CB27F2C9464FB0059F769 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AD5CB27E2C9464FB0059F769 /* FirebaseFirestore */; };
 		AD5CB2812C9464FB0059F769 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = AD5CB2802C9464FB0059F769 /* FirebaseFirestoreCombine-Community */; };
@@ -39,6 +40,7 @@
 		0077A0AAC32139E7DFAA2C08 /* Pods_PencilKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PencilKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8731C7C2BBA63DF720771125 /* Pods-PencilKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PencilKitDemo.debug.xcconfig"; path = "Target Support Files/Pods-PencilKitDemo/Pods-PencilKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		AD2B39C42C95BF97006CAA73 /* CameraButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
+		AD2B39C82C961DDF006CAA73 /* ControllerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerPresenter.swift; sourceTree = "<group>"; };
 		AD5CB2942C9474650059F769 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		AD7837162C92ECCD00638CB3 /* PencilKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PencilKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD7837192C92ECCD00638CB3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AD2B39C62C961C4D006CAA73 /* MainScreen */ = {
+			isa = PBXGroup;
+			children = (
+				AD5CB2942C9474650059F769 /* MainVC.swift */,
+			);
+			path = MainScreen;
+			sourceTree = "<group>";
+		};
+		AD2B39C72C961DD3006CAA73 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				ADF55FC22C94B8560030BEA4 /* Box.swift */,
+				AD2B39C82C961DDF006CAA73 /* ControllerPresenter.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		AD78370D2C92ECCD00638CB3 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +128,7 @@
 		AD7837182C92ECCD00638CB3 /* PencilKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				AD2B39C72C961DD3006CAA73 /* Helpers */,
 				ADF55FB42C94AC9D0030BEA4 /* Controllers */,
 				AD7837192C92ECCD00638CB3 /* AppDelegate.swift */,
 				AD78371B2C92ECCD00638CB3 /* SceneDelegate.swift */,
@@ -117,8 +137,6 @@
 				AD7837242C92ECCE00638CB3 /* LaunchScreen.storyboard */,
 				AD7837272C92ECCE00638CB3 /* Info.plist */,
 				AD78372D2C92F5CD00638CB3 /* GoogleService-Info.plist */,
-				AD5CB2942C9474650059F769 /* MainVC.swift */,
-				ADF55FC22C94B8560030BEA4 /* Box.swift */,
 				AD2B39C42C95BF97006CAA73 /* CameraButton.swift */,
 			);
 			path = PencilKitDemo;
@@ -127,6 +145,7 @@
 		ADF55FB42C94AC9D0030BEA4 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				AD2B39C62C961C4D006CAA73 /* MainScreen */,
 				ADF55FB82C94B0B20030BEA4 /* SignInScreen */,
 				ADF55FB52C94ACA50030BEA4 /* SignUpScreen */,
 			);
@@ -299,6 +318,7 @@
 				AD5CB2952C9474650059F769 /* MainVC.swift in Sources */,
 				AD78371A2C92ECCD00638CB3 /* AppDelegate.swift in Sources */,
 				ADF55FB32C948A0B0030BEA4 /* RegistrationVC.swift in Sources */,
+				AD2B39C92C961DDF006CAA73 /* ControllerPresenter.swift in Sources */,
 				ADF55FC12C94B7410030BEA4 /* LoginVM.swift in Sources */,
 				ADF55FBA2C94B0DE0030BEA4 /* ModalView.swift in Sources */,
 				AD78371C2C92ECCD00638CB3 /* SceneDelegate.swift in Sources */,

@@ -6,19 +6,15 @@
 //
 
 import UIKit
-import PencilKit
-import FirebaseCore
 import FirebaseAuth
 
-class LoginVC: UIViewController, PKCanvasViewDelegate {
+class LoginVC: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
     
     lazy var modalView = ModalView()
     lazy var coverView = UIView()
-    
-    let canvas = PKCanvasView()
     
     var viewModel: LoginViewModelProtocol!
     var coverViewTap: UITapGestureRecognizer!
@@ -30,9 +26,6 @@ class LoginVC: UIViewController, PKCanvasViewDelegate {
         addGestures()
         activityIndicator.isHidden = true
         activityIndicator.hidesWhenStopped = true
-//        canvas.delegate = self
-//        canvas.drawingPolicy = .anyInput
-//        view.addSubview(canvas)
     }
     
     private func addGestures() {
@@ -41,24 +34,17 @@ class LoginVC: UIViewController, PKCanvasViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       startObserving()
+        startObserving()
     }
     
-    override func viewDidLayoutSubviews() {
-           super.viewDidLayoutSubviews()
-//           canvas.frame = view.bounds
-       }
-    
     private func startObserving() {
-       let handler = Auth.auth().addStateDidChangeListener { (auth, user) in
+        let handler = Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
-                self.showMainScreen()
-//                print(user.email)
-               
-                   } else {
+                ControllerManager.presentController(id: "MainVC")
+            } else {
                 print("not signed in")
-                   }
             }
+        }
     }
     
     private func showModalView() {
@@ -92,10 +78,9 @@ class LoginVC: UIViewController, PKCanvasViewDelegate {
         modalView.removeFromSuperview()
         coverView.removeFromSuperview()
     }
-
+    
     @IBAction func createAccPressed(_ sender: Any) {
- 
-//        Auth.auth().currentUser?.sendEmailVerification()
+        
     }
     
     @IBAction func signInPressed(_ sender: Any) {
@@ -113,14 +98,11 @@ class LoginVC: UIViewController, PKCanvasViewDelegate {
             activityIndicator.isHidden = false
         }
     }
-
+    
     
     @IBAction func resetPasswordPressed(_ sender: Any) {
         showModalView()
     }
-    
-    
-    
 }
 
 // MARK: Binding
@@ -141,7 +123,7 @@ extension LoginVC {
             guard let self = self,
                   let success = success else { return }
             self.activityIndicator.stopAnimating()
-            success ? showMainScreen() : showAlert(with: "Something went wrong", subtitle: "Check your credentials")
+            success ? ControllerManager.presentController(id: "MainVC") : showAlert(with: "Something went wrong", subtitle: "Check your credentials")
         }
     }
     
@@ -150,13 +132,6 @@ extension LoginVC {
         let okAction = UIAlertAction(title: "Ok", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
-    }
-    
-    private func showMainScreen() {
-        let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let rootVC = mainStoryBoard.instantiateViewController(withIdentifier: "MainVC")
-        UIApplication.shared.windows.first?.rootViewController = rootVC
-        UIApplication.shared.windows.first?.makeKeyAndVisible()
     }
 }
 
