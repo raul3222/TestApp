@@ -39,18 +39,10 @@ class LoginVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startObserving()
+//        startObserving()
     }
     
-    private func startObserving() {
-        let handler = Auth.auth().addStateDidChangeListener { (auth, user) in
-            if let user = user {
-                ControllerManager.presentController(id: "MainVC")
-            } else {
-                print("not signed in")
-            }
-        }
-    }
+
     
     private func showModalView() {
         view.addSubview(coverView)

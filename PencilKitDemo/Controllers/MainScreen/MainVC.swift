@@ -45,15 +45,21 @@ class MainVC: UIViewController, PKCanvasViewDelegate {
      
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 3.0
         cameraModePicker = UIPickerView()
         cameraModePicker.dataSource = self
         cameraModePicker.delegate = self
-        cameraModePicker.backgroundColor = .clear
-        pickerContainer.addSubview(cameraModePicker)
+        canvas.delegate = self
+        openCamera()
+        setupUI()
+    }
+    
+    private func setupUI() {
         cameraModePicker.transform = CGAffineTransform(rotationAngle: rotationAngle)
         cameraModePicker.frame = CGRect(x: -250, y: -30, width: pickerContainer.bounds.width + 400, height: 100)
+        cameraModePicker.backgroundColor = .clear
+        pickerContainer.addSubview(cameraModePicker)
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 3.0
         NSLayoutConstraint.activate([
             cameraModePicker.leadingAnchor.constraint(equalTo: pickerContainer.leadingAnchor),
             cameraModePicker.trailingAnchor.constraint(equalTo: pickerContainer.trailingAnchor),
@@ -61,13 +67,11 @@ class MainVC: UIViewController, PKCanvasViewDelegate {
             cameraModePicker.bottomAnchor.constraint(equalTo: pickerContainer.bottomAnchor),
             
         ])
-        canvas.delegate = self
+        saveBtn.isHidden = true
+        shareBtn.isHidden = true
         canvas.drawingPolicy = .anyInput
         previewImgView.addSubview(canvas)
         canvas.backgroundColor = .clear
-        openCamera()
-        saveBtn.isHidden = true
-        shareBtn.isHidden = true
     }
     
     override func viewDidLayoutSubviews() {
